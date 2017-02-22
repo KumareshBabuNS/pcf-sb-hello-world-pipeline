@@ -106,7 +106,7 @@ jobs:
         file: pipeline-repo/tasks/build-artifact.yml
       - put: candidate-release
         params:
-          file: build/pcf-sb-hello-world-*.jar
+          file: built-artifact/pcf-sb-hello-world-*.jar
       - put: version
         params:
           file: version/number

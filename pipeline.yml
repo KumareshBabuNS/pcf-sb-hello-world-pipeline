@@ -1,14 +1,60 @@
 ---
+# RESOURCES
 resources:
-- name: resource-pipeline
-  type: git
-  source:
-    uri: https://github.com/JinpaLhawang/pcf-sb-hello-world-pipeline.git
 
+  # Pipeline
+  - name: resource-pipeline
+    type: git
+    source:
+      uri: https://github.com/JinpaLhawang/pcf-sb-hello-world-pipeline.git
+      branch: master
+
+  # Application
+  - name: resource-app
+    type: git
+    source:
+      uri: https://github.com/JinpaLhawang/pcf-sb-hello-world.git
+      branch: master
+
+  # Cloud Foundry
+  - name: resource-cf
+    type: cf
+    source:
+      api: {{cf-api}}
+      username: {{cf-username}}
+      password: {{cf-password}}
+      organization: {{cf-organization}}
+      space: {{cf-space}}
+      skip_cert_check: true
+
+# JOBS
 jobs:
-- name: job-hello-world
-  public: true
-  plan:
-  - get: resource-pipeline
-  - task: hello-world
-    file: resource-pipeline/tasks/hello-world.yml
+
+  # Say Hello
+  - name: job-hello-world
+    public: true
+    plan:
+      # Get Pipeline
+      - get: resource-pipeline
+      # Say Hello
+      - task: hello-world
+        file: resource-pipeline/tasks/hello-world.yml
+
+  # Deploy App
+  - name: job-deploy-app
+    public: true
+    serial: true
+    plan:
+      # Get Pipeline
+      - get: resource-pipeline
+      # Get App
+      - get: resource-app
+        trigger: true
+      # Run Tests
+      - task: task-run-tests
+        file: resource-pipeline/tasks/run-tests.yml
+      # Deploy to CF
+      - put: resource-cf
+        params:
+          manifest: resource-app/manifest.yml
+          path: resource-app

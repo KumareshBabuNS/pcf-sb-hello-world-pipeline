@@ -40,6 +40,17 @@ jobs:
       - task: hello-world
         file: resource-pipeline/tasks/hello-world.yml
 
+  # Package Artifact
+  - name: job-package-artifact
+    public: true
+    plan:
+      # Get App
+      - get: resource-app
+        trigger: true
+      # Package Artifact
+      - task: task-package-artifact
+        file: resource-pipeline/tasks/package-artifact.yml
+
   # Deploy App
   - name: job-deploy-app
     public: true

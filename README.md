@@ -1,10 +1,19 @@
 # pcf-sb-hello-world-pipeline
 Pivotal Cloud Foundry Spring Boot Hello World App Pipeline
 
+## Setup Credentials/Configuration File
+
+```bash
+cp credentials-template.yml credentials.yml
+vi credentials.yml
+```
+
+Change all 'CHANGEME' values.
+
 ## Update Pipeline
 
 ```bash
-fly -t jambudvipa set-pipeline -p pcf-sb-hello-world -c pipeline.yml
+fly -t jambudvipa set-pipeline -p pcf-sb-hello-world -c pipeline.yml --load-vars-from credentials.yml
 ```
 
 ## Watch Job

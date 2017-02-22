@@ -12,7 +12,7 @@ inputs:
 
 run:
   path: "resource-app/mvnw"
-  args: [ "-f", "resource-app/pom.xml", "package", "sonar:sonar" ]
+  args: [ "-f", "resource-app/pom.xml", "package" ]
 
 params:
   MAVEN_BASEDIR: resource-app

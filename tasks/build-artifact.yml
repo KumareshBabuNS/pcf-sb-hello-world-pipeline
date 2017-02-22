@@ -1,0 +1,25 @@
+---
+platform: linux
+
+image_resource:
+  type: docker-image
+  source:
+    repository: java
+    tag: "8"
+
+inputs:
+  - name: pipeline-repo
+  - name: application-repo
+
+outputs:
+  - name: built-artifact
+
+run:
+  path: pipeline-repo/tasks/build-artifact.sh
+  args: [
+    --input-dir, application-repo,
+    --output-dir, build,
+    --version-file, version/number,
+    --artifactId, pcf-sb-hello-world,
+    --packaging, jar
+  ]

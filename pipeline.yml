@@ -16,6 +16,27 @@ resources:
       uri: https://github.com/JinpaLhawang/pcf-sb-hello-world.git
       branch: master
 
+  # Version
+  - name: version
+    type: semver
+    source:
+      bucket: jambudvipa-pcf-sb-hello-world-releases
+      initial_version: 1.0.0
+      key: current-version
+      access_key_id: {{s3-access-key-id}}
+      secret_access_key: {{s3-secret-access-key}}
+      endpoint: s3.amazonaws.com
+
+  # Release Candidate
+  - name: candidate-release
+    type: s3
+    source:
+      bucket: jambudvipa-pcf-sb-hello-world-releases
+      regexp: pcf-sb-hello-world-(.*).jar
+      access_key_id: {{s3-access-key-id}}
+      secret_access_key: {{s3-secret-access-key}}
+      endpoint: s3.amazonaws.com
+
 #  # Releases
 #  - name: release-bucket
 #    type: s3
@@ -64,18 +85,31 @@ jobs:
       - task: task-run-unit-tests
         file: pipeline-repo/tasks/run-unit-tests.yml
 
-#  # Package Artifact
-#  - name: job-package-artifact
-#    public: true
-#    plan:
-#      # Get Pipeline
-#      - get: pipeline-repo
-#      # Get App
-#      - get: application-repo
-#        trigger: true
-#      # Package Artifact
-#      - task: task-package-artifact
-#        file: pipeline-repo/tasks/package-artifact.yml
+  # Build Artifact
+  - name: job-build-artifact
+    serial_groups: [ version ]
+    plan:
+      # Get Pipeline
+      - get: pipeline-repo
+        passed: [ job-run-unit-tests ]
+        trigger: true
+      # Get Application
+      - get: application-repo
+        passed: [ job-run-unit-tests ]
+        trigger: true
+      # Determine Version Number
+      - get: version
+        params:
+          pre: rc
+      # Build Artifact
+      - task: task-build-artifact
+        file: pipeline-repo/tasks/build-artifact.yml
+      - put: candidate-release
+        params:
+          file: build/pcf-sb-hello-world-*.jar
+      - put: version
+        params:
+          file: version/number
 
 #  # Deploy App
 #  - name: job-deploy-app
@@ -87,9 +121,9 @@ jobs:
 #      # Get App
 #      - get: application-repo
 #        trigger: true
-#      # Run Tests
-#      - task: task-run-tests
-#        file: pipeline-repo/tasks/run-tests.yml
+#      # Run Integration Tests
+#      - task: task-run-integration-tests
+#        file: pipeline-repo/tasks/run-integration-tests.yml
 #      # Deploy to CF
 #      - put: resource-cf
 #        params:

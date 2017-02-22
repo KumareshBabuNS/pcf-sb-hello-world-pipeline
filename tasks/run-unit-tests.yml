@@ -13,5 +13,5 @@ inputs:
 run:
   path: pipeline-repo/tasks/run-unit-tests.sh
   args: [
-    --input-dir, pcf-sb-hello-world
+    --input-dir, application-repo
   ]

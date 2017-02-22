@@ -1,0 +1,14 @@
+---
+resources:
+- name: resource-pipeline
+  type: git
+  source:
+    uri: https://github.com/JinpaLhawang/pcf-sb-hello-world-pipeline.git
+
+jobs:
+- name: job-hello-world
+  public: true
+  plan:
+  - get: resource-pipeline
+  - task: hello-world
+    file: resource-pipeline/tasks/hello-world.yml

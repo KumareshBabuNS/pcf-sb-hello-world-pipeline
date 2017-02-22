@@ -1,0 +1,17 @@
+---
+platform: linux
+
+image_resource:
+  type: docker-image
+  source:
+    repository: java
+    tag: 8
+
+inputs:
+  - name: pipeline-repo
+
+run:
+  path: pipeline-repo/tasks/run-unit-tests.sh
+  args: [
+    --input-dir, pcf-sb-hello-world
+  ]

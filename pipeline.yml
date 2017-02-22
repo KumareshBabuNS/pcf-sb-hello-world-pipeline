@@ -3,71 +3,95 @@
 resources:
 
   # Pipeline
-  - name: resource-pipeline
+  - name: pipeline-repo
     type: git
     source:
       uri: https://github.com/JinpaLhawang/pcf-sb-hello-world-pipeline.git
       branch: master
 
   # Application
-  - name: resource-app
+  - name: application-repo
     type: git
     source:
       uri: https://github.com/JinpaLhawang/pcf-sb-hello-world.git
       branch: master
 
-  # Cloud Foundry
-  - name: resource-cf
-    type: cf
-    source:
-      api: {{cf-api}}
-      username: {{cf-username}}
-      password: {{cf-password}}
-      organization: {{cf-organization}}
-      space: {{cf-space}}
-      skip_cert_check: true
+#  # Releases
+#  - name: release-bucket
+#    type: s3
+#    source:
+#      bucket: jambudvipa-pcf-sb-hello-world-releases
+#      regexp: pcf-sb-hello-world-(.*).jar
+#      access_key_id: {{s3-access-key-id}}
+#      secret_access_key: {{s3-secret-access-key}}
+#      endpoint: s3.amazonaws.com
+
+#  # Cloud Foundry
+#  - name: resource-cf
+#    type: cf
+#    source:
+#      api: {{cf-api}}
+#      username: {{cf-username}}
+#      password: {{cf-password}}
+#      organization: {{cf-organization}}
+#      space: {{cf-space}}
+#      skip_cert_check: true
 
 # JOBS
 jobs:
 
-  # Say Hello
-  - name: job-hello-world
-    public: true
-    plan:
-      # Get Pipeline
-      - get: resource-pipeline
-      # Say Hello
-      - task: hello-world
-        file: resource-pipeline/tasks/hello-world.yml
+#  # Say Hello
+#  - name: job-hello-world
+#    public: true
+#    plan:
+#      # Get Pipeline
+#      - get: pipeline-repo
+#      # Say Hello
+#      - task: hello-world
+#        file: pipeline-repo/tasks/hello-world.yml
 
-  # Package Artifact
-  - name: job-package-artifact
+  # Run Unit Tests
+  - name: job-run-unit-tests
     public: true
     plan:
       # Get Pipeline
-      - get: resource-pipeline
-      # Get App
-      - get: resource-app
+      - get: pipeline-repo
         trigger: true
-      # Package Artifact
-      - task: task-package-artifact
-        file: resource-pipeline/tasks/package-artifact.yml
+      # Get Application
+      - get: application-repo
+        trigger: true
+      # Run Unit Tests
+      - task: task-run-unit-tests
+        file: pipeline-repo/tasks/run-unit-tests.yml
 
-  # Deploy App
-  - name: job-deploy-app
-    public: true
-    serial: true
-    plan:
-      # Get Pipeline
-      - get: resource-pipeline
-      # Get App
-      - get: resource-app
-        trigger: true
-      # Run Tests
-      - task: task-run-tests
-        file: resource-pipeline/tasks/run-tests.yml
-      # Deploy to CF
-      - put: resource-cf
-        params:
-          manifest: resource-app/manifest.yml
-          path: resource-app
+#  # Package Artifact
+#  - name: job-package-artifact
+#    public: true
+#    plan:
+#      # Get Pipeline
+#      - get: pipeline-repo
+#      # Get App
+#      - get: application-repo
+#        trigger: true
+#      # Package Artifact
+#      - task: task-package-artifact
+#        file: pipeline-repo/tasks/package-artifact.yml
+
+#  # Deploy App
+#  - name: job-deploy-app
+#    public: true
+#    serial: true
+#    plan:
+#      # Get Pipeline
+#      - get: pipeline-repo
+#      # Get App
+#      - get: application-repo
+#        trigger: true
+#      # Run Tests
+#      - task: task-run-tests
+#        file: pipeline-repo/tasks/run-tests.yml
+#      # Deploy to CF
+#      - put: resource-cf
+#        params:
+#          manifest: application-repo/manifest.yml
+#          path: application-repo

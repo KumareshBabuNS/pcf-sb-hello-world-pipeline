@@ -44,6 +44,8 @@ jobs:
   - name: job-package-artifact
     public: true
     plan:
+      # Get Pipeline
+      - get: resource-pipeline
       # Get App
       - get: resource-app
         trigger: true

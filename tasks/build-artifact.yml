@@ -10,6 +10,7 @@ image_resource:
 inputs:
   - name: pipeline-repo
   - name: application-repo
+  - name: version
 
 outputs:
   - name: build

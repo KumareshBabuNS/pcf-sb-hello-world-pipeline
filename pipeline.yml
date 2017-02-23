@@ -94,28 +94,35 @@ jobs:
       # Build Artifact
       - task: task-build-artifact
         file: pipeline-repo/tasks/build-artifact.yml
+      # Put Artifact into S3
       - put: candidate-release
         params:
           file: build/pcf-sb-hello-world-*.jar
+      # Put Version File into S3
       - put: version
         params:
           file: version/number
 
-#  # Deploy App
-#  - name: job-deploy-app
-#    public: true
-#    serial: true
-#    plan:
-#      # Get Pipeline
-#      - get: pipeline-repo
-#      # Get App
-#      - get: application-repo
-#        trigger: true
-#      # Run Integration Tests
-#      - task: task-run-integration-tests
-#        file: pipeline-repo/tasks/run-integration-tests.yml
-#      # Deploy to CF
-#      - put: resource-cf
-#        params:
-#          manifest: application-repo/manifest.yml
-#          path: application-repo
+  # Run Integration Tests
+  - name: job-run-integration-tests
+    serial: true
+    plan:
+      # Get Pipeline
+      - get: pipeline-repo
+        passed: [ job-build-artifact ]
+        trigger: true
+      # Get Application
+      - get: application-repo
+        passed: [ job-build-artifact ]
+        trigger: true
+      # Get Artifact from S3
+      - get: candidate-release
+        passed: [ job-build-artifact ]
+        trigger: true
+      # Get Version File from S3
+      - get: version
+        passed: [ job-build-artifact ]
+      # Prepare CF Manifest for Integration Environment
+      - task: task-prepare-integration
+        file: pipeline-repo/tasks/prepare-integration.yml
+      # Deploy Application to PCF

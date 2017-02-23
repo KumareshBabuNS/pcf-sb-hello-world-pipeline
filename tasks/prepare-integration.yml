@@ -1,0 +1,28 @@
+---
+platform: linux
+
+image_resource:
+  type: docker-image
+  source:
+    repository: java
+    tag: "8"
+
+inputs:
+  - name: pipeline-repo
+  - name: application-repo
+  - name: candidate-release
+  - name: version
+
+outputs:
+  - name: prepare-integration
+
+run:
+  path: pipeline-repo/tasks/prepare-integration.sh
+  args: [
+    --input-dir, candidate-release,
+    --output-dir, prepare-integration,
+    --version-file, version/number,
+    --input-manifest, application-repo/manifest.yml,
+    --artifactId, pcf-sb-hello-world,
+    --packaging, jar
+  ]

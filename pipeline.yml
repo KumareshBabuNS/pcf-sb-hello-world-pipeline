@@ -86,6 +86,12 @@ jobs:
       # Build Artifact
       - task: task-build-artifact
         file: pipeline-repo/tasks/build-artifact.yml
+        params:
+          APPLICATION_DIR: application-repo
+          ARTIFACT_DIR: build
+          VERSION_FILE: version/number
+          ARTIFACT_ID: pcf-sb-hello-world
+          PACKAGING: jar
       # Put Artifact into S3
       - put: release-candidate
         params:

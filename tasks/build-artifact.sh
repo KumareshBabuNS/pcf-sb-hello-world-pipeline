@@ -1,64 +1,11 @@
-#!/bin/sh
+#!/bin/bash
 
-inputDir=  outputDir=  versionFile=  artifactId=  packaging=
+VERSION=`cat $VERSION_FILE`
+ARTIFACT_NAME="${ARTIFACT_ID}-${VERSION}.${PACKAGING}"
 
-while [ $# -gt 0 ]; do
-  case $1 in
-    -i | --input-dir )
-      inputDir=$2
-      shift
-      ;;
-    -o | --output-dir )
-      outputDir=$2
-      shift
-      ;;
-    -v | --version-file )
-      versionFile=$2
-      shift
-      ;;
-    -a | --artifactId )
-      artifactId=$2
-      shift
-      ;;
-    -p | --packaging )
-      packaging=$2
-      shift
-      ;;
-    * )
-      echo "Unrecognized option: $1" 1>&2
-      exit 1
-      ;;
-  esac
-  shift
-done
+cd $APPLICATION_DIR
+./mvnw clean package -Pci -DversionNumber=$VERSION
 
-error_and_exit() {
-  echo $1 >&2
-  exit 1
-}
-
-if [ ! -d "$inputDir" ]; then
-  error_and_exit "missing input directory: $inputDir"
-fi
-if [ ! -d "$outputDir" ]; then
-  error_and_exit "missing output directory: $outputDir"
-fi
-if [ ! -f "$versionFile" ]; then
-  error_and_exit "missing version file: $versionFile"
-fi
-if [ -z "$artifactId" ]; then
-  error_and_exit "missing artifactId!"
-fi
-if [ -z "$packaging" ]; then
-  error_and_exit "missing packaging!"
-fi
-
-version=`cat $versionFile`
-artifactName="${artifactId}-${version}.${packaging}"
-
-cd $inputDir
-./mvnw clean package -Pci -DversionNumber=$version
-
-# Copy artifact to concourse output folder
+# Copy artifact to Concourse output folder
 cd ..
-cp $inputDir/target/$artifactName $outputDir/$artifactName
+cp $APPLICATION_DIR/target/$ARTIFACT_NAME $ARTIFACT_DIR/$ARTIFACT_NAME

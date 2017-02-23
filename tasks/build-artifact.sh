@@ -59,7 +59,7 @@ artifactName="${artifactId}-${version}.${packaging}"
 echo $artifactName
 
 cd $inputDir
-./mvnw clean package -DversionNumber=$version
+./mvnw clean package -Pci -DversionNumber=$version
 
 # Copy artifact to concourse output folder
 cd ..

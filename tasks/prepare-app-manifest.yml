@@ -14,13 +14,13 @@ inputs:
   - name: version
 
 outputs:
-  - name: prepare-integration
+  - name: prepare-app-manifest
 
 run:
-  path: pipeline-repo/tasks/prepare-integration.sh
+  path: pipeline-repo/tasks/prepare-app-manifest.sh
   args: [
     --input-dir, release-candidate,
-    --output-dir, prepare-integration,
+    --output-dir, prepare-app-manifest,
     --version-file, version/number,
     --input-manifest, application-repo/manifest.yml,
     --artifactId, pcf-sb-hello-world,

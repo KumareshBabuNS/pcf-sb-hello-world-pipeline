@@ -113,20 +113,35 @@ jobs:
       - get: application-repo
         passed: [ job-build-artifact ]
         trigger: true
-      # Get Artifact from S3
-      - get: release-candidate
-        passed: [ job-build-artifact ]
-        trigger: true
-      # Get Version File from S3
-      - get: version
-        passed: [ job-build-artifact ]
-      # Prepare Cloud Foundry Manifest
-      - task: task-prepare-integration
-        file: pipeline-repo/tasks/prepare-integration.yml
-      # Deploy Application to Cloud Foundry
-      - put: cf
-        params:
-          manifest: prepare-integration/manifest.yml
       # Run Integration Tests
       - task: task-run-integration-tests
         file: pipeline-repo/tasks/run-integration-tests.yml
+        params:
+          APPLICATION_DIR: application-repo
+
+  # Deploy Application to Cloud Foundry
+  - name: job-deploy-application
+    serial: true
+    plan:
+      # Get Pipeline
+      - get: pipeline-repo
+        passed: [ job-run-integration-tests ]
+        trigger: true
+      # Get Application
+      - get: application-repo
+        passed: [ job-run-integration-tests ]
+        trigger: true
+      # Get Artifact from S3
+      - get: release-candidate
+        passed: [ job-run-integration-tests ]
+        trigger: true
+      # Get Version File from S3
+      - get: version
+        passed: [ job-run-integration-tests ]
+      # Prepare Cloud Foundry Manifest
+      - task: task-prepare-app-manifest
+        file: pipeline-repo/tasks/prepare-app-manifest.yml
+      # Deploy Application to Cloud Foundry
+      - put: cf
+        params:
+          manifest: prepare-app-manifest/manifest.yml

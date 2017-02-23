@@ -112,10 +112,10 @@ jobs:
       # Get Version File from S3
       - get: version
         passed: [ job-build-artifact ]
-      # Prepare CF Manifest for Integration Environment
+      # Prepare Cloud Foundry Manifest
       - task: task-prepare-integration
         file: pipeline-repo/tasks/prepare-integration.yml
-      # Deploy Application to PCF
+      # Deploy Application to Cloud Foundry
       - put: cf
         params:
           manifest: prepare-integration/manifest.yml

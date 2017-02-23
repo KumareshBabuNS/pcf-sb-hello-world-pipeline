@@ -1,5 +1,6 @@
 # pcf-sb-hello-world-pipeline
-Pivotal Cloud Foundry Spring Boot Hello World App Pipeline
+
+Pivotal Cloud Foundry Spring Boot Hello World Pipeline
 
 ## Setup Credentials/Configuration File
 
@@ -19,5 +20,5 @@ fly -t jambudvipa set-pipeline -p pcf-sb-hello-world -c pipeline.yml --load-vars
 ## Watch Job
 
 ```bash
-fly -t jambudvipa watch --job pcf-sb-hello-world/job-hello-world --build 3
+fly -t jambudvipa watch --job pcf-sb-hello-world/job-run-unit-tests --build 1
 ```

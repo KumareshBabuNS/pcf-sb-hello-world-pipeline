@@ -28,7 +28,7 @@ resources:
       endpoint: {{s3-endpoint}}
 
   # Release Candidate
-  - name: candidate-release
+  - name: release-candidate
     type: s3
     source:
       bucket: {{s3-bucket-release-candidates}}
@@ -85,7 +85,7 @@ jobs:
       - task: task-build-artifact
         file: pipeline-repo/tasks/build-artifact.yml
       # Put Artifact into S3
-      - put: candidate-release
+      - put: release-candidate
         params:
           file: build/pcf-sb-hello-world-*.jar
       # Put Version File into S3
@@ -106,7 +106,7 @@ jobs:
         passed: [ job-build-artifact ]
         trigger: true
       # Get Artifact from S3
-      - get: candidate-release
+      - get: release-candidate
         passed: [ job-build-artifact ]
         trigger: true
       # Get Version File from S3

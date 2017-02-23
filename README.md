@@ -14,7 +14,7 @@ Change all 'CHANGEME' values.
 ## Update Pipeline
 
 ```bash
-fly -t jambudvipa set-pipeline -p pcf-sb-hello-world -c pipeline.yml --load-vars-from credentials.yml
+fly -t jambudvipa set-pipeline -p pcf-sb-hello-world -c pipeline.yml -l credentials.yml
 ```
 
 ## Watch Job

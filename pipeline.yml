@@ -32,7 +32,7 @@ resources:
     type: s3
     source:
       bucket: {{s3-bucket-release-candidates}}
-      regexp: "{{artifact-id}}-(.*).{{packaging}}"
+      regexp: {{s3-bucket-release-regexp}}
       access_key_id: {{s3-access-key-id}}
       secret_access_key: {{s3-secret-access-key}}
       endpoint: {{s3-endpoint}}

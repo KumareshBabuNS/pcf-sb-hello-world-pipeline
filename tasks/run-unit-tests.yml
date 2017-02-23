@@ -9,6 +9,7 @@ image_resource:
 
 inputs:
   - name: pipeline-repo
+  - name: application-repo
 
 run:
   path: pipeline-repo/tasks/run-unit-tests.sh

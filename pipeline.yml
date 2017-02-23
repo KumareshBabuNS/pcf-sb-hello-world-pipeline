@@ -37,26 +37,16 @@ resources:
       secret_access_key: {{s3-secret-access-key}}
       endpoint: {{s3-endpoint}}
 
-#  # Releases
-#  - name: release-bucket
-#    type: s3
-#    source:
-#      bucket: jambudvipa-pcf-sb-hello-world-releases
-#      regexp: pcf-sb-hello-world-(.*).jar
-#      access_key_id: {{s3-access-key-id}}
-#      secret_access_key: {{s3-secret-access-key}}
-#      endpoint: s3.amazonaws.com
-
-#  # Cloud Foundry
-#  - name: resource-cf
-#    type: cf
-#    source:
-#      api: {{cf-api}}
-#      username: {{cf-username}}
-#      password: {{cf-password}}
-#      organization: {{cf-organization}}
-#      space: {{cf-space}}
-#      skip_cert_check: true
+  # Cloud Foundry
+  - name: cf
+    type: cf
+    source:
+      api: {{cf-api}}
+      username: {{cf-username}}
+      password: {{cf-password}}
+      organization: {{cf-organization}}
+      space: {{cf-space}}
+      skip_cert_check: true
 
 # JOBS
 jobs:
@@ -126,3 +116,6 @@ jobs:
       - task: task-prepare-integration
         file: pipeline-repo/tasks/prepare-integration.yml
       # Deploy Application to PCF
+      - put: cf
+        params:
+          manifest: prepare-integration/manifest.yml

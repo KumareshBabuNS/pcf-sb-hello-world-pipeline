@@ -61,16 +61,6 @@ resources:
 # JOBS
 jobs:
 
-#  # Say Hello
-#  - name: job-hello-world
-#    public: true
-#    plan:
-#      # Get Pipeline
-#      - get: pipeline-repo
-#      # Say Hello
-#      - task: hello-world
-#        file: pipeline-repo/tasks/hello-world.yml
-
   # Run Unit Tests
   - name: job-run-unit-tests
     public: true

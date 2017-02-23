@@ -64,6 +64,8 @@ jobs:
       # Run Unit Tests
       - task: task-run-unit-tests
         file: pipeline-repo/tasks/run-unit-tests.yml
+        params:
+          APPLICATION_DIR: application-repo
 
   # Build Artifact
   - name: job-build-artifact

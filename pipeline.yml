@@ -21,7 +21,7 @@ resources:
     type: semver
     source:
       bucket: jambudvipa-pcf-sb-hello-world-releases
-      initial_version: 1.0.0
+      initial_version: 1.0.0-rc.0
       key: current-version
       access_key_id: {{s3-access-key-id}}
       secret_access_key: {{s3-secret-access-key}}

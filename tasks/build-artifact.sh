@@ -54,13 +54,14 @@ if [ -z "$packaging" ]; then
 fi
 
 version=`cat $versionFile`
+echo $version
 artifactName="${artifactId}-${version}.${packaging}"
+echo $artifactName
 
 cd $inputDir
 ./mvnw clean package -DversionNumber=$version
 
-find .
-
 # Copy artifact to concourse output folder
 cd ..
+find .
 cp $inputDir/target/$artifactName $outputDir/$artifactName

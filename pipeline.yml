@@ -6,36 +6,36 @@ resources:
   - name: pipeline-repo
     type: git
     source:
-      uri: https://github.com/JinpaLhawang/pcf-sb-hello-world-pipeline.git
-      branch: master
+      uri: {{pipeline-repo-uri}}
+      branch: {{pipeline-repo-branch}}
 
   # Application
   - name: application-repo
     type: git
     source:
-      uri: https://github.com/JinpaLhawang/pcf-sb-hello-world.git
-      branch: master
+      uri: {{application-repo-uri}}
+      branch: {{application-repo-branch}}
 
   # Version
   - name: version
     type: semver
     source:
-      bucket: jambudvipa-pcf-sb-hello-world-releases
+      bucket: {{s3-bucket-version}}
       initial_version: 1.0.0-rc.0
       key: current-version
       access_key_id: {{s3-access-key-id}}
       secret_access_key: {{s3-secret-access-key}}
-      endpoint: s3.amazonaws.com
+      endpoint: {{s3-endpoint}}
 
   # Release Candidate
   - name: candidate-release
     type: s3
     source:
-      bucket: jambudvipa-pcf-sb-hello-world-releases
+      bucket: {{s3-bucket-release-candidates}}
       regexp: pcf-sb-hello-world-(.*).jar
       access_key_id: {{s3-access-key-id}}
       secret_access_key: {{s3-secret-access-key}}
-      endpoint: s3.amazonaws.com
+      endpoint: {{s3-endpoint}}
 
 #  # Releases
 #  - name: release-bucket

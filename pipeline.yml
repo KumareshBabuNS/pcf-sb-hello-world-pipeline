@@ -6,15 +6,15 @@ resources:
   - name: pipeline-repo
     type: git
     source:
-      uri: {{pipeline-repo-uri}}
-      branch: {{pipeline-repo-branch}}
+      uri: {{github-pipeline-uri}}
+      branch: {{github-pipeline-branch}}
 
   # Application
   - name: application-repo
     type: git
     source:
-      uri: {{application-repo-uri}}
-      branch: {{application-repo-branch}}
+      uri: {{github-application-uri}}
+      branch: {{github-application-branch}}
 
   # Version
   - name: version

@@ -119,3 +119,6 @@ jobs:
       - put: cf
         params:
           manifest: prepare-integration/manifest.yml
+      # Run Integration Tests
+      - task: task-run-integration-tests
+        file: pipeline-repo/tasks/run-integration-tests.yml

@@ -18,7 +18,7 @@ outputs:
 run:
   path: pipeline-repo/tasks/build-artifact.sh
   args: [
-    --input-dir, .,
+    --input-dir, application-repo,
     --output-dir, build,
     --version-file, version/number,
     --artifactId, pcf-sb-hello-world,

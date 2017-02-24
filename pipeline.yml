@@ -133,11 +133,11 @@ jobs:
         trigger: true
       # Get Artifact from S3
       - get: release-candidate
-        passed: [ run-integration-tests ]
+        passed: [ build-artifact ]
         trigger: true
       # Get Version File from S3
       - get: version
-        passed: [ run-integration-tests ]
+        passed: [ build-artifact ]
       # Prepare Cloud Foundry Manifest
       - task: task-prepare-app-manifest
         file: pipeline-repo/tasks/prepare-app-manifest.yml

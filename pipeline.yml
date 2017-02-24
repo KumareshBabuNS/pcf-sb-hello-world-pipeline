@@ -141,6 +141,13 @@ jobs:
       # Prepare Cloud Foundry Manifest
       - task: task-prepare-app-manifest
         file: pipeline-repo/tasks/prepare-app-manifest.yml
+        params:
+          APPLICATION_DIR: application-repo
+          ARTIFACT_DIR: release-candidate
+          OUTPUT_DIR: prepare-app-manifest
+          VERSION_FILE: version/number
+          ARTIFACT_ID: {{artifact-id}}
+          PACKAGING: {{packaging}}
       # Deploy Application to Cloud Foundry
       - put: cf
         params:

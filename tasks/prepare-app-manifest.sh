@@ -1,92 +1,25 @@
 #!/bin/bash
 
-inputDir=  outputDir=  inputManifest=  versionFile=  artifactId=  packaging=
-
-while [ $# -gt 0 ]; do
-  case $1 in
-    -i | --input-dir )
-      inputDir=$2
-      shift
-      ;;
-    -o | --output-dir )
-      outputDir=$2
-      shift
-      ;;
-    -v | --version-file )
-      versionFile=$2
-      shift
-      ;;
-    -f | --input-manifest )
-      inputManifest=$2
-      shift
-      ;;
-    -a | --artifactId )
-      artifactId=$2
-      shift
-      ;;
-    -p | --packaging )
-      packaging=$2
-      shift
-      ;;
-    -n | --hostname )
-      hostname=$2
-      shift
-      ;;
-    * )
-      echo "Unrecognized option: $1" 1>&2
-      exit 1
-      ;;
-  esac
-  shift
-done
-
-error_and_exit() {
-  echo $1 >&2
-  exit 1
-}
-
-if [ ! -d "$inputDir" ]; then
-  error_and_exit "missing input directory: $inputDir"
-fi
-if [ ! -d "$outputDir" ]; then
-  error_and_exit "missing output directory: $outputDir"
-fi
-if [ ! -f "$versionFile" ]; then
-  error_and_exit "missing version file: $versionFile"
-fi
-if [ ! -f "$inputManifest" ]; then
-  error_and_exit "missing input manifest: $inputManifest"
-fi
-if [ -z "$artifactId" ]; then
-  error_and_exit "missing artifactId!"
-fi
-if [ -z "$packaging" ]; then
-  error_and_exit "missing packaging!"
-fi
-
 # copy the artifact to the output directory
-version=`cat $versionFile`
-artifactName="${artifactId}-${version}.${packaging}"
+VERSION=`cat $VERSION_FILE`
+ARTIFACT_NAME="${ARTIFACT_ID}-${VERSION}.${PACKAGING}"
 
-inputArtifact="$inputDir/$artifactName"
-outputArtifact="$outputDir/$artifactName"
+INPUT_ARTIFACT="$ARTIFACT_DIR/$ARTIFACT_NAME"
+OUTPUT_ARTIFACT="$OUTPUT_DIR/$ARTIFACT_NAME"
 
-if [ ! -f "$inputArtifact" ]; then
-  error_and_exit "can not find artifact: $inputArtifact"
+if [ ! -f "$INPUT_ARTIFACT" ]; then
+  error_and_exit "can not find artifact: $INPUT_ARTIFACT"
 fi
 
-cp $inputArtifact $outputArtifact
+cp $INPUT_ARTIFACT $OUTPUT_ARTIFACT
 
 # copy the manifest to the output directory and process it
-outputManifest=$outputDir/manifest.yml
+INPUT_MANIFEST=$APPLICATION_DIR/manifest.yml
+OUTPUT_MANIFEST=$OUTPUT_DIR/manifest.yml
 
-cp $inputManifest $outputManifest
+cp $INPUT_MANIFEST $OUTPUT_MANIFEST
 
 # the path in the manifest is always relative to the manifest itself
-sed -i -- "s|path: .*$|path: $artifactName|g" $outputManifest
+sed -i -- "s|path: .*$|path: $ARTIFACT_NAME|g" $OUTPUT_MANIFEST
 
-if [ ! -z "$hostname" ]; then
-  sed -i "s|host: .*$|host: ${hostname}|g" $outputManifest
-fi
-
-cat $outputManifest
+cat $OUTPUT_MANIFEST

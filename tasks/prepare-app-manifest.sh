@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -xe
+
 # copy the artifact to the output directory
 VERSION=`cat $VERSION_FILE`
 ARTIFACT_NAME="${ARTIFACT_ID}-${VERSION}.${PACKAGING}"
@@ -21,5 +23,10 @@ cp $INPUT_MANIFEST $OUTPUT_MANIFEST
 
 # the path in the manifest is always relative to the manifest itself
 sed -i -- "s|path: .*$|path: $ARTIFACT_NAME|g" $OUTPUT_MANIFEST
+
+cat ./current-app-info/current-app.txt
+NEW_APP_COLOR=`cat ./current-app-info/next-app.txt`
+
+sed "s/$ARTIFACT_ID/$NEW_APP_COLOR-$ARTIFACT_ID/" $INPUT_MANIFEST > $OUTPUT_MANIFEST
 
 cat $OUTPUT_MANIFEST

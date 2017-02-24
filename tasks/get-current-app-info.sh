@@ -5,14 +5,14 @@ set -xe
 pwd
 env
 
-cf api $PWS_API --skip-ssl-validation
+cf api $CF_API --skip-ssl-validation
 
-cf login -u $PWS_USER -p $PWS_PWD -o "$PWS_ORG" -s "$PWS_SPACE"
+cf login -u $CF_USERNAME -p $CF_PASSWORD -o "$CF_ORGANIZATION" -s "$CF_SPACE"
 
 cf apps
 
 set +e
-cf apps | grep "main-$PWS_APP_SUFFIX" | grep green
+cf apps | grep "main-$ARTIFACT_ID" | grep green
 if [ $? -eq 0 ]
 then
   echo "green" > ./current-app-info/current-app.txt

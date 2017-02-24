@@ -22,9 +22,6 @@ cp $INPUT_MANIFEST $OUTPUT_MANIFEST
 # the path in the manifest is always relative to the manifest itself
 sed -i -- "s|path: .*$|path: $ARTIFACT_NAME|g" $OUTPUT_MANIFEST
 
-cat $OUTPUT_MANIFEST
-
-cat ./current-app-info/current-app.txt
 NEW_APP_COLOR=`cat ./current-app-info/next-app.txt`
 
 sed -i -- "s|name: .*$|name: $NEW_APP_COLOR-$ARTIFACT_ID|g" $OUTPUT_MANIFEST

@@ -183,5 +183,35 @@ jobs:
       - task: run-load-tests
         file: pipeline-repo/tasks/run-load-tests.yml
         params:
-          ARTIFACT_ID: {{artifact-id}}
           CF_APP_DOMAIN: {{cf-app-domain}}
+          ARTIFACT_ID: {{artifact-id}}
+
+  # Promote New Version
+  - name: promote-new-version
+    serial: true
+    plan:
+      # Get Pipeline
+      - get: pipeline-repo
+        passed: [ run-load-tests ]
+        trigger: true
+      # Get Current Blue/Green App Color
+      - task: get-current-app-color
+        file: pipeline-repo/tasks/get-current-app-info.yml
+        params:
+          CF_API: {{cf-api}}
+          CF_USERNAME: {{cf-username}}
+          CF_PASSWORD: {{cf-password}}
+          CF_ORGANIZATION: {{cf-organization}}
+          CF_SPACE: {{cf-space}}
+          ARTIFACT_ID: {{artifact-id}}
+      # Switch Application Routes
+      - task: switch-app-routes
+        file: pipeline-repo/tasks/switch-app-routes.yml
+        params:
+          CF_API: {{cf-api}}
+          CF_USERNAME: {{cf-username}}
+          CF_PASSWORD: {{cf-password}}
+          CF_ORGANIZATION: {{cf-organization}}
+          CF_SPACE: {{cf-space}}
+          CF_APP_DOMAIN: {{cf-app-domain}}
+          ARTIFACT_ID: {{artifact-id}}

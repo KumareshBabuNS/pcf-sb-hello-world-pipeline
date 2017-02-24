@@ -1,7 +1,5 @@
 #!/bin/bash
 
-set -xe
-
 pwd
 env
 

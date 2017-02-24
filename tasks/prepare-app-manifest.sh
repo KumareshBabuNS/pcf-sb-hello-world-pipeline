@@ -1,7 +1,5 @@
 #!/bin/bash
 
-set -xe
-
 # copy the artifact to the output directory
 VERSION=`cat $VERSION_FILE`
 ARTIFACT_NAME="${ARTIFACT_ID}-${VERSION}.${PACKAGING}"
@@ -20,6 +18,8 @@ INPUT_MANIFEST=$APPLICATION_DIR/manifest.yml
 OUTPUT_MANIFEST=$OUTPUT_DIR/manifest.yml
 
 cp $INPUT_MANIFEST $OUTPUT_MANIFEST
+
+cat $OUTPUT_MANIFEST
 
 # the path in the manifest is always relative to the manifest itself
 sed -i -- "s|path: .*$|path: $ARTIFACT_NAME|g" $OUTPUT_MANIFEST

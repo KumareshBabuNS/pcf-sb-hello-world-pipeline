@@ -52,7 +52,7 @@ resources:
 jobs:
 
   # Run Unit Tests
-  - name: job-run-unit-tests
+  - name: run-unit-tests
     public: true
     plan:
       # Get Pipeline
@@ -68,16 +68,16 @@ jobs:
           APPLICATION_DIR: application-repo
 
   # Build Artifact
-  - name: job-build-artifact
+  - name: build-artifact
     serial_groups: [ version ]
     plan:
       # Get Pipeline
       - get: pipeline-repo
-        passed: [ job-run-unit-tests ]
+        passed: [ run-unit-tests ]
         trigger: true
       # Get Application
       - get: application-repo
-        passed: [ job-run-unit-tests ]
+        passed: [ run-unit-tests ]
         trigger: true
       # Determine Version Number
       - get: version
@@ -102,16 +102,16 @@ jobs:
           file: version/number
 
   # Run Integration Tests
-  - name: job-run-integration-tests
+  - name: run-integration-tests
     serial: true
     plan:
       # Get Pipeline
       - get: pipeline-repo
-        passed: [ job-build-artifact ]
+        passed: [ build-artifact ]
         trigger: true
       # Get Application
       - get: application-repo
-        passed: [ job-build-artifact ]
+        passed: [ build-artifact ]
         trigger: true
       # Run Integration Tests
       - task: task-run-integration-tests
@@ -120,24 +120,24 @@ jobs:
           APPLICATION_DIR: application-repo
 
   # Deploy Application to Cloud Foundry
-  - name: job-deploy-application
+  - name: deploy-application
     serial: true
     plan:
       # Get Pipeline
       - get: pipeline-repo
-        passed: [ job-run-integration-tests ]
+        passed: [ run-integration-tests ]
         trigger: true
       # Get Application
       - get: application-repo
-        passed: [ job-run-integration-tests ]
+        passed: [ run-integration-tests ]
         trigger: true
       # Get Artifact from S3
       - get: release-candidate
-        passed: [ job-build-artifact ]
+        passed: [ run-integration-tests ]
         trigger: true
       # Get Version File from S3
       - get: version
-        passed: [ job-build-artifact ]
+        passed: [ run-integration-tests ]
       # Prepare Cloud Foundry Manifest
       - task: task-prepare-app-manifest
         file: pipeline-repo/tasks/prepare-app-manifest.yml

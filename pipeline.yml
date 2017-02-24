@@ -53,7 +53,6 @@ jobs:
 
   # Run Unit Tests
   - name: run-unit-tests
-    public: true
     plan:
       # Get Pipeline
       - get: pipeline-repo
@@ -161,3 +160,28 @@ jobs:
       - put: cf
         params:
           manifest: prepare-app-manifest/manifest.yml
+
+  # Run Load Tests
+  - name: run-load-tests
+    serial: true
+    plan:
+      # Get Pipeline
+      - get: pipeline-repo
+        passed: [ deploy-application ]
+        trigger: true
+      # Get Current Blue/Green App Color
+      - task: get-current-app-color
+        file: pipeline-repo/tasks/get-current-app-info.yml
+        params:
+          CF_API: {{cf-api}}
+          CF_USERNAME: {{cf-username}}
+          CF_PASSWORD: {{cf-password}}
+          CF_ORGANIZATION: {{cf-organization}}
+          CF_SPACE: {{cf-space}}
+          ARTIFACT_ID: {{artifact-id}}
+      # Run Load Tests
+      - task: run-load-tests
+        file: pipeline-repo/tasks/run-load-tests.yml
+        params:
+          ARTIFACT_ID: {{artifact-id}}
+          CF_APP_DOMAIN: {{cf-app-domain}}

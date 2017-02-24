@@ -5,7 +5,7 @@ Pivotal Cloud Foundry Spring Boot Hello World Pipeline
 ## Setup Credentials/Configuration File
 
 ```bash
-cp credentials-template.yml credentials.yml
+cp credentials.yml.sample credentials.yml
 vi credentials.yml
 ```
 

@@ -5,7 +5,7 @@ echo "Installing artillery for load tests: https://artillery.io/docs/getting-sta
 npm install -g artillery
 
 export NEXT_APP_COLOR=$(cat ./current-app-info/next-app.txt)
-export NEXT_APP_URL=http://$NEXT_APP_COLOR-$ARTIFACT_ID.$CF_APP_DOMAIN/
+export NEXT_APP_URL=http://$NEXT_APP_COLOR-$ARTIFACT_ID.$CF_APP_DOMAIN/health
 
 echo "Running artillery load tests against $NEXT_APP_URL..."
 

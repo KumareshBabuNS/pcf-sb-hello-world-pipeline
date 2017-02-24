@@ -12,7 +12,7 @@ cf login -u $CF_USERNAME -p $CF_PASSWORD -o "$CF_ORGANIZATION" -s "$CF_SPACE"
 cf apps
 
 set +e
-cf apps | grep "main-$ARTIFACT_ID" | grep green
+cf apps | grep $ARTIFACT_ID | grep green
 if [ $? -eq 0 ]
 then
   echo "green" > ./current-app-info/current-app.txt

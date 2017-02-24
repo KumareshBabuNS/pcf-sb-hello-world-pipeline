@@ -12,6 +12,7 @@ inputs:
   - name: application-repo
   - name: release-candidate
   - name: version
+  - name: current-app-info
 
 outputs:
   - name: prepare-app-manifest

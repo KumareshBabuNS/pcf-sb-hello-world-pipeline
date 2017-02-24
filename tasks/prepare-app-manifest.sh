@@ -31,6 +31,6 @@ cat $OUTPUT_MANIFEST
 cat ./current-app-info/current-app.txt
 NEW_APP_COLOR=`cat ./current-app-info/next-app.txt`
 
-sed "s/name: $ARTIFACT_ID/name: $NEW_APP_COLOR-$ARTIFACT_ID/" $INPUT_MANIFEST > $OUTPUT_MANIFEST
+sed "s/name: $ARTIFACT_ID/name: $NEW_APP_COLOR-$ARTIFACT_ID/" $OUTPUT_MANIFEST > $OUTPUT_MANIFEST
 
 cat $OUTPUT_MANIFEST

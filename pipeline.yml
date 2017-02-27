@@ -55,6 +55,7 @@ jobs:
 
   # Run Unit Tests
   - name: run-unit-tests
+    serial: true
     plan:
       # Get Pipeline
       - get: pipeline-repo
@@ -69,7 +70,7 @@ jobs:
 
   # Build Artifact
   - name: build-artifact
-    serial_groups: [ version ]
+    serial: true
     plan:
       # Get Pipeline
       - get: pipeline-repo

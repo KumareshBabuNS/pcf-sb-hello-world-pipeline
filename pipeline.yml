@@ -1,6 +1,7 @@
 ---
 # GROUPS
-# Allows grouping of jobs together under a header and shows them on different tabs in the UI.
+# Allows grouping of jobs together under a header and shows them on different
+# tabs in the UI.
 # https://concourse.ci/configuring-groups.html
 groups:
   - name: tests
@@ -12,6 +13,8 @@ groups:
 resources:
 
   # Pipeline
+  # Implemented in separate repo, but could also be embedded in application
+  # repo under a 'ci' directory.
   - name: pipeline-repo
     type: git
     source:
@@ -26,6 +29,8 @@ resources:
       branch: {{github-application-branch}}
 
   # Version
+  # Implemented using Amazon S3 but could use GitHub Repository.
+  # https://github.com/concourse/semver-resource
   - name: version
     type: semver
     source:
@@ -38,6 +43,10 @@ resources:
       endpoint: {{s3-endpoint}}
 
   # Release Candidate
+  # Implemented using Amazon S3 bucket, but could also use community provided
+  # Azure Blobstore, Google Cloud Storage, Artifactory etc.
+  # https://github.com/concourse/s3-resource
+  # https://concourse.ci/resource-types.html#community-resources
   - name: release-candidate
     type: s3
     source:
@@ -49,6 +58,7 @@ resources:
       endpoint: {{s3-endpoint}}
 
   # Cloud Foundry
+  # https://github.com/concourse/cf-resource
   - name: cloud-foundry
     type: cf
     source:
@@ -61,6 +71,8 @@ resources:
 
 # JOBS
 jobs:
+
+  # TESTS
 
   # Run Unit Tests
   - name: run-unit-tests
@@ -129,6 +141,15 @@ jobs:
         file: pipeline-repo/tasks/run-integration-tests.yml
         params:
           APPLICATION_DIR: application-repo
+
+  # DEPLOYMENT
+  # Implemented using a Blue-Green Deployment Strategy
+  # Runs two identical production environments called Blue and Green. At any
+  # time, only one of the environments is live, with the live environment
+  # serving all production traffic. Once deployed and fully tested the
+  # software in not live environment, switch the router so all incoming
+  # requests now go to new release.
+  # https://docs.cloudfoundry.org/devguide/deploy-apps/blue-green.html
 
   # Deploy Application to Cloud Foundry
   - name: deploy-application

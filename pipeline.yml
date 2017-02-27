@@ -57,11 +57,11 @@ jobs:
   - name: run-unit-tests
     serial: true
     plan:
-      # Get Pipeline
-      - get: pipeline-repo
-        trigger: true
       # Get Application
       - get: application-repo
+        trigger: true
+      # Get Pipeline
+      - get: pipeline-repo
         trigger: true
       # Run Unit Tests
       - task: task-run-unit-tests
@@ -73,12 +73,12 @@ jobs:
   - name: build-artifact
     serial: true
     plan:
-      # Get Pipeline
-      - get: pipeline-repo
-        passed: [ run-unit-tests ]
-        trigger: true
       # Get Application
       - get: application-repo
+        passed: [ run-unit-tests ]
+        trigger: true
+      # Get Pipeline
+      - get: pipeline-repo
         passed: [ run-unit-tests ]
         trigger: true
       # Determine Version Number
@@ -107,12 +107,12 @@ jobs:
   - name: run-integration-tests
     serial: true
     plan:
-      # Get Pipeline
-      - get: pipeline-repo
-        passed: [ build-artifact ]
-        trigger: true
       # Get Application
       - get: application-repo
+        passed: [ build-artifact ]
+        trigger: true
+      # Get Pipeline
+      - get: pipeline-repo
         passed: [ build-artifact ]
         trigger: true
       # Run Integration Tests
@@ -125,12 +125,12 @@ jobs:
   - name: deploy-application
     serial: true
     plan:
-      # Get Pipeline
-      - get: pipeline-repo
-        passed: [ run-integration-tests ]
-        trigger: true
       # Get Application
       - get: application-repo
+        passed: [ run-integration-tests ]
+        trigger: true
+      # Get Pipeline
+      - get: pipeline-repo
         passed: [ run-integration-tests ]
         trigger: true
       # Get Artifact from S3
@@ -168,13 +168,13 @@ jobs:
   - name: run-load-tests
     serial: true
     plan:
-      # Get Pipeline
-      - get: pipeline-repo
-        passed: [ deploy-application ]
-        trigger: true
       # Get Application
       - get: application-repo
         passed: [ run-integration-tests ]
+        trigger: true
+      # Get Pipeline
+      - get: pipeline-repo
+        passed: [ deploy-application ]
         trigger: true
       # Get Current Blue/Green App Color
       - task: get-current-app-color
@@ -197,13 +197,13 @@ jobs:
   - name: promote-new-version
     serial: true
     plan:
-      # Get Pipeline
-      - get: pipeline-repo
-        passed: [ run-load-tests ]
-        trigger: true
       # Get Application
       - get: application-repo
         passed: [ run-integration-tests ]
+        trigger: true
+      # Get Pipeline
+      - get: pipeline-repo
+        passed: [ run-load-tests ]
         trigger: true
       # Get Current Blue/Green App Color
       - task: get-current-app-color

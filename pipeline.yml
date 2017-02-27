@@ -1,4 +1,11 @@
 ---
+# GROUPS
+groups:
+  - name: tests
+    jobs: [ run-unit-tests, build-artifact, run-integration-tests ]
+  - name: deployment
+    jobs: [ deploy-application, run-load-tests, promote-new-version ]
+
 # RESOURCES
 resources:
 

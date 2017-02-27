@@ -1,5 +1,7 @@
 ---
 # GROUPS
+# Allows grouping of jobs together under a header and shows them on different tabs in the UI.
+# https://concourse.ci/configuring-groups.html
 groups:
   - name: tests
     jobs: [ run-unit-tests, build-artifact, run-integration-tests ]
@@ -47,7 +49,7 @@ resources:
       endpoint: {{s3-endpoint}}
 
   # Cloud Foundry
-  - name: cf
+  - name: cloud-foundry
     type: cf
     source:
       api: {{cf-api}}
@@ -167,7 +169,7 @@ jobs:
           ARTIFACT_ID: {{artifact-id}}
           PACKAGING: {{packaging}}
       # Deploy Application to Cloud Foundry
-      - put: cf
+      - put: cloud-foundry
         params:
           manifest: prepare-app-manifest/manifest.yml
 

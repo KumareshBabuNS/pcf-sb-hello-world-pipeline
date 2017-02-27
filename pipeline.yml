@@ -20,6 +20,7 @@ resources:
   - name: version
     type: semver
     source:
+      region_name: {{s3-region}}
       bucket: {{s3-bucket-version}}
       initial_version: {{initial-version}}
       key: {{s3-bucket-version-key}}
@@ -31,6 +32,7 @@ resources:
   - name: release-candidate
     type: s3
     source:
+      region_name: {{s3-region}}
       bucket: {{s3-bucket-release-candidates}}
       regexp: {{s3-bucket-release-regexp}}
       access_key_id: {{s3-access-key-id}}

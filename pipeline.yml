@@ -58,7 +58,6 @@ jobs:
     plan:
       # Get Pipeline
       - get: pipeline-repo
-        trigger: true
       # Get Application
       - get: application-repo
         trigger: true

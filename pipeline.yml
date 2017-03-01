@@ -13,7 +13,8 @@ groups:
 resource_types:
 
   # Artifactory
-  # Implemented using Artifactory, but could use AWS S3, Azure Blobstore etc
+  # Implemented using Artifactory, but instead of defining a 'resource_type',
+  # could instead use an established 'resource' for AWS S3, Azure Blobstore etc
   # https://github.com/pivotalservices/artifactory-resource
   - name: artifactory
     type: docker-image
@@ -40,28 +41,26 @@ resources:
       branch: {{github-application-branch}}
 
   # Version
-  # Implemented using AWS S3 but could use GitHub Repository.
+  # Implemented using GitHub Repository but could instead use AWS S3.
   # https://github.com/concourse/semver-resource
   - name: version
     type: semver
     source:
-      region_name: {{s3-region}}
-      bucket: {{s3-bucket-version}}
       initial_version: {{initial-version}}
-      key: {{s3-bucket-version-key}}
-      access_key_id: {{s3-access-key-id}}
-      secret_access_key: {{s3-secret-access-key}}
-      endpoint: {{s3-endpoint}}
+      driver: git
+      uri: {{github-version-uri}}
+      branch: {{github-version-branch}}
+      file: {{github-version-file}}
 
   # Release Candidate
   - name: release-candidate
     type: artifactory
     source:
-      endpoint: http://artifactory.kenzan-dev.com/artifactory
-      repository: "/ext-release-local/"
+      endpoint: {{artifactory-endpoint}}
+      repository: {{artifactory-repository}}
       regex: "pcf-sb-hello-world-(?<version>.*).jar"
-      username: edenwalker
-      password: edenwalker
+      username: {{artifactory-username}}
+      password: {{artifactory-password}}
       skip_ssl_verification: true
 
   # Cloud Foundry

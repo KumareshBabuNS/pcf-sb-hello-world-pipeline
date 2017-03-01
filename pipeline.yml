@@ -13,6 +13,8 @@ groups:
 resource_types:
 
   # Artifactory
+  # Implemented using Artifactory, but could use AWS S3, Azure Blobstore etc
+  # https://github.com/pivotalservices/artifactory-resource
   - name: artifactory
     type: docker-image
     source:
@@ -38,7 +40,7 @@ resources:
       branch: {{github-application-branch}}
 
   # Version
-  # Implemented using Amazon S3 but could use GitHub Repository.
+  # Implemented using AWS S3 but could use GitHub Repository.
   # https://github.com/concourse/semver-resource
   - name: version
     type: semver
@@ -52,7 +54,6 @@ resources:
       endpoint: {{s3-endpoint}}
 
   # Release Candidate
-  # https://github.com/pivotalservices/artifactory-resource
   - name: release-candidate
     type: artifactory
     source:
@@ -121,7 +122,7 @@ jobs:
           VERSION_FILE: version/number
           ARTIFACT_ID: {{artifact-id}}
           PACKAGING: {{packaging}}
-      # Put Artifact into S3
+      # Put Artifact into Artifactory
       - put: release-candidate
         params:
           file: build/pcf-sb-hello-world-*.jar

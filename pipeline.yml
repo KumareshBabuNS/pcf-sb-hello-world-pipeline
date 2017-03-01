@@ -51,6 +51,7 @@ resources:
       uri: {{github-version-uri}}
       branch: {{github-version-branch}}
       file: {{github-version-file}}
+      username: JinpaLhawang
 
   # Release Candidate
   - name: release-candidate

@@ -58,7 +58,7 @@ resources:
     source:
       endpoint: http://artifactory.kenzan-dev.com/artifactory
       repository: "/ext-release-local/"
-      regex: "pcf-sb-hello-world-*.jar"
+      regex: "pcf-sb-hello-world-(?<version>.*).jar"
       username: edenwalker
       password: edenwalker
       skip_ssl_verification: true

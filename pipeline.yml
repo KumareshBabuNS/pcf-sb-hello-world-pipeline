@@ -170,11 +170,11 @@ jobs:
       - get: pipeline-repo
         passed: [ run-integration-tests ]
         trigger: true
-      # Get Artifact from S3
-      - get: release-candidate
-        passed: [ build-artifact ]
       # Get Version File from S3
       - get: version
+        passed: [ build-artifact ]
+      # Get Artifact from Artifactory
+      - get: release-candidate
         passed: [ build-artifact ]
       # Get Current Blue/Green App Color
       - task: get-current-app-color

@@ -2,6 +2,10 @@
 
 Pivotal Cloud Foundry Spring Boot Hello World Pipeline
 
+Reference:
+* [Pivotal Field Engineering PCF Demo](https://github.com/Pivotal-Field-Engineering/PCF-demo)
+* [Pivotal Services Blue Green Deployment](https://github.com/pivotalservices/concourse-pipeline-samples/tree/master/blue-green-app-deployment)
+
 ## Setup Credentials/Configuration File
 
 ```bash

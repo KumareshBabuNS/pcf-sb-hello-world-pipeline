@@ -9,6 +9,15 @@ groups:
   - name: deployment
     jobs: [ deploy-application, run-load-tests, promote-new-version ]
 
+# RESOURCE TYPES
+resource_types:
+
+  # Artifactory
+  - name: artifactory
+    type: docker-image
+    source:
+      repository: pivotalservices/artifactory-resource
+
 # RESOURCES
 resources:
 
@@ -43,19 +52,16 @@ resources:
       endpoint: {{s3-endpoint}}
 
   # Release Candidate
-  # Implemented using Amazon S3 bucket, but could also use community provided
-  # Azure Blobstore, Google Cloud Storage, Artifactory etc.
-  # https://github.com/concourse/s3-resource
-  # https://concourse.ci/resource-types.html#community-resources
+  # https://github.com/pivotalservices/artifactory-resource
   - name: release-candidate
-    type: s3
+    type: artifactory
     source:
-      region_name: {{s3-region}}
-      bucket: {{s3-bucket-release-candidates}}
-      regexp: {{s3-bucket-release-regexp}}
-      access_key_id: {{s3-access-key-id}}
-      secret_access_key: {{s3-secret-access-key}}
-      endpoint: {{s3-endpoint}}
+      endpoint: http://artifactory.kenzan-dev.com/artifactory
+      repository: "/ext-release-local/"
+      regex: "pcf-sb-hello-world-*.jar"
+      username: edenwalker
+      password: edenwalker
+      skip_ssl_verification: true
 
   # Cloud Foundry
   # https://github.com/concourse/cf-resource
